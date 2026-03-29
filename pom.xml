@@ -144,7 +144,6 @@
                     <id>maven-snapshot</id>
                     <name>Local Docker Snapshots</name>
                     <url>http://107.20.41.206:8081/repository/maven-snapshots/</url>
-                    <layout>legacy</layout>
                 </snapshotRepository>
             </distributionManagement>
         </profile>
