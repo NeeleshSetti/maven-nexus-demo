@@ -15,21 +15,37 @@
         <url>https://github.com/ovelindstrom/maven-nexus-demo/tree/${project.scm.tag}</url>
         <tag>HEAD</tag>
     </scm>
-    
+
     <build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-release-plugin</artifactId>
-            <version>2.5.3</version>
-        </plugin>
-    </plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+            </plugin>
+        </plugins>
     </build>
 
     <properties>
         <nexus.server>localhost</nexus.server>
         <jenkins.server>localhost</jenkins.server>
     </properties>
+
+    <!-- ====================================================== -->
+    <!-- D I S T R I B U T I O N   M A N A G E M E N T          -->
+    <!-- ====================================================== -->
+    <distributionManagement>
+        <repository>
+            <id>maven-release</id>
+            <name>Local Docker Release</name>
+            <url>http://107.20.41.206:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshot</id>
+            <name>Local Docker Snapshots</name>
+            <url>http://107.20.41.206:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <profiles>
         <!-- ====================================================== -->
@@ -49,19 +65,19 @@
             </properties>
 
             <repositories>
-            <repository>
-                <id>adobe-public-releases</id>
-                <name>Adobe Public Repository</name>
-                <url>https://repo.adobe.com/nexus/content/groups/public</url>
-                <releases>
-                    <enabled>true</enabled>
-                    <updatePolicy>never</updatePolicy>
-                </releases>
-                <snapshots>
-                    <enabled>false</enabled>
-                </snapshots>
-            </repository>
-        </repositories>
+                <repository>
+                    <id>adobe-public-releases</id>
+                    <name>Adobe Public Repository</name>
+                    <url>https://repo.adobe.com/nexus/content/groups/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
 
             <pluginRepositories>
                 <pluginRepository>
@@ -88,7 +104,6 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
-
 
             <repositories>
                 <repository>
@@ -122,39 +137,18 @@
         </profile>
 
         <!-- ====================================================== -->
-        <!-- L O C A L  D O C K E R  D E P L O Y                    -->
+        <!-- J E N K I N S   P R O F I L E                          -->
         <!-- ====================================================== -->
-
-        <profile>
-            <id>local-deploy</id>
-
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-
-            <distributionManagement>
-                <repository>
-                    <uniqueVersion>true</uniqueVersion>
-                    <id>maven-release</id>
-                    <name>Local Docker Release</name>
-                    <url>http://107.20.41.206:8081/repository/maven-releases/</url>
-                </repository>
-                <snapshotRepository>
-                    <uniqueVersion>true</uniqueVersion>
-                    <id>maven-snapshot</id>
-                    <name>Local Docker Snapshots</name>
-                    <url>http://107.20.41.206:8081/repository/maven-snapshots/</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
         <profile>
             <id>jenkins</id>
 
             <activation>
-                <activeByDefault>false</activeByDefault><file>
-                <exists>/var/run/docker.pid</exists>
-            </file>
+                <activeByDefault>false</activeByDefault>
+                <file>
+                    <exists>/var/run/docker.pid</exists>
+                </file>
             </activation>
+
             <properties>
                 <nexus.server>nexus</nexus.server>
                 <jenkins.server>jenkins</jenkins.server>
